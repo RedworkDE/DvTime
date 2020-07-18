@@ -20,7 +20,7 @@
 
     <Authors>RedworkDE</Authors>
     <Copyright>(c) 2020 RedworDE</Copyright>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
 
     <!-- Configuration Switches -->
     <_IsDebug>False</_IsDebug>

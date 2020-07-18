@@ -2,6 +2,11 @@
   "Releases": [
     {
       "Id": "RedworkDE.DvTime",
+      "Version": "1.2.0",
+      "DownloadUrl": "https://github.com/RedworkDE/DvTime/releases/download/v1.2.0/RedworkDE.DvTime-1.2.0-UMM.zip"
+    },
+    {
+      "Id": "RedworkDE.DvTime",
       "Version": "1.1.0",
       "DownloadUrl": "https://github.com/RedworkDE/DvTime/releases/download/v1.1.0/RedworkDE.DvTime-1.1.0-UMM.zip"
     },
