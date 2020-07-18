@@ -19,8 +19,8 @@ namespace RedworkDE.DvTime
 			set
 			{
 				if (Mathf.Approximately(_timeScale, value)) return;
-				BaseTime = DateTime.Now;
 				Offset += CurrentDelta;
+				BaseTime = DateTime.Now;
 				_timeScale = value;
 			}
 		}
