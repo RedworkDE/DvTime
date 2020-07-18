@@ -31,16 +31,14 @@ namespace RedworkDE.DvTime
 		public string Id => "realtime";
 		public void Save(JObject shared, JObject settings)
 		{
-			shared[nameof(TimeScale)] = TimeScale;
-
+			settings[nameof(TimeScale)] = TimeScale;
 			settings[nameof(BaseTime)] = BaseTime;
 			settings[nameof(Offset)] = Offset;
 		}
 
 		public void Load(JObject shared, JObject settings)
 		{
-			TimeScale = shared[nameof(TimeScale)]?.ToObject<float>() ?? 1;
-
+			TimeScale = (settings[nameof(TimeScale)] ?? shared[nameof(TimeScale)])?.ToObject<float>() ?? 1;
 			BaseTime = settings[nameof(BaseTime)]?.ToObject<DateTime>() ?? DateTime.Now;
 			Offset = settings[nameof(Offset)]?.ToObject<TimeSpan>() ?? TimeSpan.Zero;
 		}

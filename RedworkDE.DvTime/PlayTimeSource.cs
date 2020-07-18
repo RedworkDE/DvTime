@@ -16,15 +16,13 @@ namespace RedworkDE.DvTime
 		public string Id => "playtime";
 		public void Save(JObject shared, JObject settings)
 		{
-			shared[nameof(TimeScale)] = TimeScale;
-
+			settings[nameof(TimeScale)] = TimeScale;
 			settings[nameof(CurrentTime)] = CurrentTime;
 		}
 
 		public void Load(JObject shared, JObject settings)
 		{
-			TimeScale = shared[nameof(TimeScale)]?.ToObject<float>() ?? 4;
-
+			TimeScale = (settings[nameof(TimeScale)] ?? shared[nameof(TimeScale)])?.ToObject<float>() ?? 4;
 			CurrentTime = settings[nameof(CurrentTime)]?.ToObject<DateTime>() ?? DateTime.Now;
 		}
 

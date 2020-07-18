@@ -16,7 +16,7 @@ namespace RedworkDE.DvTime
 	/// Main Entry point of the mod, ensure that is type is a MonoBehaviour and add it to an GameObject
 	/// </summary>
 #if BepInEx
-	[BepInPlugin("61BFE110-1B58-4CD1-895F-A4163B4F0641", "RedworkDE.DvTime", "1.0.0")]
+	[BepInPlugin("61BFE110-1B58-4CD1-895F-A4163B4F0641", "RedworkDE.DvTime", "$Version")]
 #endif
 	public class AutoLoadManager
 #if BepInEx
@@ -32,18 +32,21 @@ namespace RedworkDE.DvTime
 
         mod.OnGUI += entry =>
         {
-	        var timeSource = TimeUpdater.Instance.TimeSources.IndexOf(TimeUpdater.Instance.TimeSource);
+	        var timeSource = TimeUpdater.Instance.TimeSources.IndexOf(TimeUpdater.Instance.TimeSource!);
 	        UnityModManager.UI.ToggleGroup(timeSource, TimeUpdater.Instance.TimeSources.Select(ts => ts.GetType().Name).ToArray(), n => TimeUpdater.Instance.TimeSource = TimeUpdater.Instance.TimeSources[n]);
 
 	        switch (TimeUpdater.Instance.TimeSource)
 	        {
 				case RealTimeSource rts:
 					UnityModManager.UI.DrawFloatField(rts.TimeScale, "Timescale", n => rts.TimeScale = n);
+					var offset = rts.Offset.ToString("g");
+					GUILayout.Label("Offset: ");
+					offset = GUILayout.TextField(offset);
+					if (TimeSpan.TryParse(offset, out var ts)) rts.Offset = ts;
 					break;
 				case PlayTimeSource pts:
 					UnityModManager.UI.DrawFloatField(pts.TimeScale, "Timescale", n => pts.TimeScale = n);
 					break;
-
 	        }
         };
 

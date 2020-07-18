@@ -20,7 +20,7 @@
 
     <Authors>RedworkDE</Authors>
     <Copyright>(c) 2020 RedworDE</Copyright>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
 
     <!-- Configuration Switches -->
     <_IsDebug>False</_IsDebug>
@@ -124,10 +124,18 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Error Text="You must define exactly one of the compilation constants 'BepInEx' and 'UMM'" Condition="'$(_ModLoaderError)' != ''" />
+    <Error Condition="!Exists('wallclock')" Text="wallclock bundle must be build, open the unity project, click Build/Wall Clock Bundle" />
+
+    <WriteLinesToFile File="$(IntermediateOutputPath)\AutoLoad.cs" Lines="$([System.IO.File]::ReadAllText(AutoLoad.cs).Replace('$Version','$(Version)'))" Overwrite="true" Condition="$(_IsBepInEx)"/>
+    <ItemGroup Condition="$(_IsBepInEx)">
+      <Compile Remove="AutoLoad.cs"/>
+      <Compile Include="$(IntermediateOutputPath)\AutoLoad.cs"/>
+    </ItemGroup>
   </Target>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="powershell Compress-Archive -DestinationPath '$(BaseOutputDirectory)..\$(MSBuildProjectName)-$(Version)-$(LoaderName).zip' -Path '$(OutputPath)' -Force"></Exec>
+    <WriteLinesToFile File="$(OutputPath)\Info.json" Lines="$([System.IO.File]::ReadAllText($(OutputPath)\Info.json).Replace('$Version','$(Version)'))" Overwrite="true" Condition="$(_IsUMM)"/>
+    <Exec Command="powershell Compress-Archive -DestinationPath '$(BaseOutputDirectory)..\$(MSBuildProjectName)-$(Version)-$(LoaderName).zip' -Path '$(OutputPath)' -Force" Condition="$(_IsPublish)"></Exec>
   </Target>
 
 </Project>

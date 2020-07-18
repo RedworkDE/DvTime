@@ -2,7 +2,7 @@
   "Id": "RedworkDE.DvTime",
   "DisplayName": "Functional Clocks",
   "Author": "RedworkDE",
-  "Version": "1.0.0",
+  "Version": "$Version",
   "EntryMethod": "RedworkDE.DvTime.AutoLoadManager.Load",
   "repository": "https://raw.githubusercontent.com/RedworkDE/DvTime/master/Repository.json"
 }
