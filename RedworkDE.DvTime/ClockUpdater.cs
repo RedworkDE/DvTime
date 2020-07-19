@@ -6,9 +6,12 @@ namespace RedworkDE.DvTime
 {
 	public class ClockUpdater : MonoBehaviour<ClockUpdater>
 	{
-		private Transform[] _hourTransforms = null!;
-		private Transform[] _minuteTransforms = null!;
-		private Transform[] _secondTransforms = null!;
+		public Transform[] _hourTransforms = null!;
+		public Quaternion[] _hourRot = null!;
+		public Transform[] _minuteTransforms = null!;
+		public Quaternion[] _minuteRot = null!;
+		public Transform[] _secondTransforms = null!;
+		public Quaternion[] _secondRot = null!;
 		public Vector3 BaseRotation;
 
 		void Awake()
@@ -22,6 +25,10 @@ namespace RedworkDE.DvTime
 
 		void LateUpdate()
 		{
+			_hourRot ??= _hourTransforms.Select(t => t.localRotation).ToArray();
+			_minuteRot ??= _minuteTransforms.Select(t => t.localRotation).ToArray();
+			_secondRot ??= _secondTransforms.Select(t => t.localRotation).ToArray();
+
 			var time = CurrentTime.Time;
 
 
@@ -30,9 +37,9 @@ namespace RedworkDE.DvTime
 			var secondAngle = time.GetSecond() / 60f * 360f;
 
 
-			foreach (var transform in _hourTransforms) transform.localEulerAngles = BaseRotation * hourAngle;
-			foreach (var transform in _minuteTransforms) transform.localEulerAngles = BaseRotation * minuteAngle;
-			foreach (var transform in _secondTransforms) transform.localEulerAngles = BaseRotation * secondAngle;
+			for (var i = 0; i < _hourTransforms.Length; i++) _hourTransforms[i].localRotation = _hourRot[i] * Quaternion.Euler(BaseRotation * hourAngle);
+			for (var i = 0; i < _minuteTransforms.Length; i++) _minuteTransforms[i].localRotation = _minuteRot[i] * Quaternion.Euler(BaseRotation * minuteAngle);
+			for (var i = 0; i < _secondTransforms.Length; i++) _secondTransforms[i].localRotation = _secondRot[i] * Quaternion.Euler(BaseRotation * secondAngle);
 		}
 	}
 

@@ -20,7 +20,7 @@
 
     <Authors>RedworkDE</Authors>
     <Copyright>(c) 2020 RedworDE</Copyright>
-    <Version>1.2.0</Version>
+    <Version>1.3.0</Version>
 
     <!-- Configuration Switches -->
     <_IsDebug>False</_IsDebug>
@@ -82,8 +82,8 @@
 
   <ItemGroup>
     <None Remove=".gitignore" />
-    <None Remove="wallclock" />
-    <EmbeddedResource Include="wallclock" />
+    <None Remove="clocks" />
+    <EmbeddedResource Include="clocks" />
   </ItemGroup>
 
   <!-- add one entry for each assembly where access to private members is required -->
@@ -124,7 +124,7 @@
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
     <Error Text="You must define exactly one of the compilation constants 'BepInEx' and 'UMM'" Condition="'$(_ModLoaderError)' != ''" />
-    <Error Condition="!Exists('wallclock')" Text="wallclock bundle must be build, open the unity project, click Build/Wall Clock Bundle" />
+    <Error Condition="!Exists('clocks')" Text="clocks bundle must be build, open the unity project, click Build/Clocks Bundle" />
 
     <WriteLinesToFile File="$(IntermediateOutputPath)\AutoLoad.cs" Lines="$([System.IO.File]::ReadAllText(AutoLoad.cs).Replace('$Version','$(Version)'))" Overwrite="true" Condition="$(_IsBepInEx)"/>
     <ItemGroup Condition="$(_IsBepInEx)">

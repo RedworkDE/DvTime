@@ -11,7 +11,7 @@ namespace RedworkDE.DvTime
 
 		static ClockLoader()
 		{
-			_wallClockBundle = AssetBundle.LoadFromStream(typeof(ClockLoader).Assembly.GetManifestResourceStream(typeof(ClockLoader), "wallclock"));
+			_wallClockBundle = AssetBundle.LoadFromStream(typeof(ClockLoader).Assembly.GetManifestResourceStream(typeof(ClockLoader), "clocks"));
 
 			WorldStreamingInit.LoadingFinished += () =>
 			{
@@ -64,12 +64,49 @@ namespace RedworkDE.DvTime
 
 		private static void AddStationClocks(Transform transform)
 		{
-			if (transform.name.StartsWith("StationClock")) transform.gameObject.AddComponent<ClockUpdater>().BaseRotation = new Vector3(-1, 0, 0);
+			if (transform.name.StartsWith("StationClock")) AddStationClock(transform.gameObject);
 			else
 			{
 				foreach (var tf in transform.OfType<Transform>())
 					AddStationClocks(tf);
 			}
+		}
+
+		private static void AddStationClock(GameObject go)
+		{
+			var originalHour = go.transform.Find("StationClock_hour_LOD0");
+			var originalMinute = go.transform.Find("StationClock_minute_LOD0");
+
+			var hourAsset = _wallClockBundle.LoadAsset<GameObject>("StationClock_hour_LOD0");
+			var hour1 = Object.Instantiate(hourAsset, originalHour.position, Quaternion.identity, go.transform);
+			var hour2 = Object.Instantiate(hourAsset, originalHour.position, Quaternion.identity, go.transform);
+			hour1.transform.localEulerAngles = new Vector3(0, 0, 0);
+			hour2.transform.localEulerAngles = new Vector3(0, 180, 0);
+
+			var minuteAsset = _wallClockBundle.LoadAsset<GameObject>("StationClock_minute_LOD0");
+			var minute1 = Object.Instantiate(minuteAsset, originalMinute.position, Quaternion.identity, go.transform);
+			var minute2 = Object.Instantiate(minuteAsset, originalMinute.position, Quaternion.identity, go.transform);
+			minute1.transform.localEulerAngles = new Vector3(0, 0, 0);
+			minute2.transform.localEulerAngles = new Vector3(0, 180, 0);
+
+			hour1.GetComponentInChildren<MeshRenderer>().material = hour2.GetComponentInChildren<MeshRenderer>().material = originalHour.GetComponent<MeshRenderer>().material;
+			Object.Destroy(originalHour.gameObject);
+			Object.Destroy(go.transform.Find("StationClock_hour_LOD1").gameObject);
+
+			minute1.GetComponentInChildren<MeshRenderer>().material = minute2.GetComponentInChildren<MeshRenderer>().material = originalMinute.GetComponent<MeshRenderer>().material;
+			Object.Destroy(originalMinute.gameObject);
+			Object.Destroy(go.transform.Find("StationClock_minute_LOD1").gameObject);
+
+
+			var upd1 = go.AddComponent<ClockUpdater>();
+			upd1.BaseRotation = new Vector3(-1, 0, 0);
+			upd1._hourTransforms = new[] {hour1.transform};
+			upd1._minuteTransforms = new[] {minute1.transform};
+
+			var upd2 = go.AddComponent<ClockUpdater>();
+			upd2.BaseRotation = new Vector3(-1, 0, 0);
+			upd2._hourTransforms = new[] { hour2.transform };
+			upd2._minuteTransforms = new[] { minute2.transform };
 		}
 	}
 }
