@@ -8,7 +8,6 @@ namespace RedworkDE.DvTime
 {
 	public class TimeUpdater : AutoCreateMonoBehaviour<TimeUpdater>
 	{
-		public const float DEFAULT_TIME_SCALE = 1440;
 		private const string SAVE_GAME_KEY = "RedworkDE.DvTime.TimeUpdater";
 		private const string SAVE_GAME_KEY_SOURCE = SAVE_GAME_KEY + ".source";
 
@@ -46,23 +45,30 @@ namespace RedworkDE.DvTime
 		{
 			_instance = this;
 			TimeSource = RealTime;
-			SaveGameManager.Loaded += ()=>
-			{
-				var type = SaveGameManager.data.GetString(SAVE_GAME_KEY_SOURCE);
-				if (type is { } && type != TimeSource?.Id)
-				{
-					foreach (var timeSource in TimeSources)
-					{
-						if (timeSource.Id == type)
-						{
-							_timeSource = timeSource;
-							return;
-						}
-					}
-				}
+			SaveGameManager.Loaded += LoadInitial;
+		}
 
-				Load();
-			};
+		private void LoadInitial()
+		{
+			var type = SaveGameManager.data.GetString(SAVE_GAME_KEY_SOURCE);
+			Logger.LogDebug($"source to load: {type}");
+			if (type is { } && type != TimeSource?.Id)
+			{
+				foreach (var timeSource in TimeSources)
+				{
+					if (timeSource.Id == type)
+					{
+						Logger.LogDebug($"found source: {timeSource.Id}");
+						_timeSource = timeSource;
+
+						break;
+					}
+
+					Logger.LogDebug($"wrong source: {timeSource.Id}");
+				}
+			}
+
+			Load();
 		}
 
 		void Update()
@@ -122,7 +128,8 @@ namespace RedworkDE.DvTime
 		[HarmonyPatch(typeof(SaveGameManager), nameof(SaveGameManager.DoLoadIO)), HarmonyPostfix]
 		private static void SaveGameManager_DoLoadIO_Patch()
 		{
-			Instance.Load();
+			
+			Instance.LoadInitial();
 		}
 	}
 	
