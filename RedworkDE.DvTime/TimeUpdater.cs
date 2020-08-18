@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
@@ -40,6 +40,7 @@ namespace RedworkDE.DvTime
 		public static RealTimeSource RealTime = new RealTimeSource();
 		public static PlayTimeSource PlayTime = new PlayTimeSource();
 		public List<ITimeSource> TimeSources { get; } = new List<ITimeSource>() {RealTime, PlayTime};
+		public static event Action BeforeLoad;
 
 		void Awake()
 		{
@@ -50,6 +51,7 @@ namespace RedworkDE.DvTime
 
 		private void LoadInitial()
 		{
+			BeforeLoad?.Invoke();
 			var type = SaveGameManager.data.GetString(SAVE_GAME_KEY_SOURCE);
 			Logger.LogDebug($"source to load: {type}");
 			if (type is { } && type != TimeSource?.Id)
