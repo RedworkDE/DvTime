@@ -68,3 +68,4 @@ public static class TimeSource
 Implement the interface `RedworkDE.DvTime.ITimeSource`.  
 Add an instance to the list `RedworkDE.DvTime.TimeUpdater.Instance.TimeSources`.  
 This must happen before the save is loaded or it will not be loaded correctly and fall back to realtime.  
+Schedule an action on `RedworkED.DvTime.TimeUpdater.BeforeLoad` during your mod's load to make sure your time source instance is added before the save is loaded.  
