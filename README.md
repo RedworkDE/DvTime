@@ -66,5 +66,5 @@ public static class TimeSource
 
 ## Adding new sources
 Implement the interface `RedworkDE.DvTime.ITimeSource`.  
-Add an instance to the list `RedworkDE.DvTime.TimeUpdater.Instance.TimeSources`.  
-This must happen before the save is loaded or it will not be loaded correctly and fall back to realtime.  
+Add an event handler to `RedworkDE.DvTime.TimeUpdater.RegisterTimeSource` and in the event handler add your new source to the provided list.  
+The first item in that list will be used as the default source.
