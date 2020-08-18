@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace RedworkDE.DvTime
 {
-	public class ClockUpdater : MonoBehaviour<ClockUpdater>
+	public class ClockUpdater : MonoBehaviour
 	{
 		public Transform[] _hourTransforms = null!;
 		public Quaternion[] _hourRot = null!;
@@ -20,7 +20,7 @@ namespace RedworkDE.DvTime
 			_minuteTransforms = transform.OfType<Transform>().Where(tf => tf.name.IndexOf("minute", StringComparison.OrdinalIgnoreCase) != -1).ToArray();
 			_secondTransforms = transform.OfType<Transform>().Where(tf => tf.name.IndexOf("second", StringComparison.OrdinalIgnoreCase) != -1).ToArray();
 			
-			Logger.LogInfo($"Found Clock {gameObject}, {_hourTransforms.Length} / {_minuteTransforms.Length} / {_secondTransforms.Length}");
+			Log.Info($"Found Clock {gameObject}, {_hourTransforms.Length} / {_minuteTransforms.Length} / {_secondTransforms.Length}");
 		}
 
 		void LateUpdate()

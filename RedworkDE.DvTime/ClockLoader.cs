@@ -5,18 +5,19 @@ using HarmonyLib;
 
 namespace RedworkDE.DvTime
 {
-	public class ClockLoader : AutoLoad<ClockLoader>
+	public class ClockLoader
 	{
 		private static AssetBundle _wallClockBundle;
 
-		static ClockLoader()
+		[AutoLoad]
+		static void Init()
 		{
 			_wallClockBundle = AssetBundle.LoadFromStream(typeof(ClockLoader).Assembly.GetManifestResourceStream(typeof(ClockLoader), "clocks"));
 
 			WorldStreamingInit.LoadingFinished += () =>
 			{
 				var scene = SceneManager.GetActiveScene();
-				Logger.LogDebug($"searching scene: {scene.isLoaded} // {scene.name} // {scene.rootCount}");
+				Log.Debug($"searching scene: {scene.isLoaded} // {scene.name} // {scene.rootCount}");
 				foreach (var root in scene.GetRootGameObjects()) AddWallClocks(root.transform);
 			};
 		}
@@ -57,7 +58,7 @@ namespace RedworkDE.DvTime
 		[HarmonyPatch(typeof(Streamer), nameof(Streamer.AddSceneGO)), HarmonyPrefix]
 		private static void Streamer_AddSceneGO_Patch(GameObject sceneGO)
 		{
-			Logger.LogInfo($"Loaded streamer scence {sceneGO}");
+			Log.Info($"Loaded streamer scence {sceneGO}");
 
 			AddStationClocks(sceneGO.transform);
 		}

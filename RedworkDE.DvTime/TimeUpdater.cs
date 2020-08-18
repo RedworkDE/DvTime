@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
 using UnityEngine;
 using HarmonyLib;
 
 namespace RedworkDE.DvTime
 {
-	public class TimeUpdater : AutoCreateMonoBehaviour<TimeUpdater>
+	[AutoCreate]
+	public class TimeUpdater : MonoBehaviour
 	{
 		private const string SAVE_GAME_KEY = "RedworkDE.DvTime.TimeUpdater";
 		private const string SAVE_GAME_KEY_SOURCE = SAVE_GAME_KEY + ".source";
@@ -23,48 +25,63 @@ namespace RedworkDE.DvTime
 		}
 
 		private ITimeSource? _timeSource;
+		private readonly List<ITimeSource> _timeSources = new List<ITimeSource>();
 
 		public ITimeSource? TimeSource
 		{
-			get => _timeSource;
+			get => _timeSource ?? TimeSources.FirstOrDefault();
 			set
 			{
-				Logger.LogDebug($"Set TimeSource: {value}");
+				Log.Debug($"Set TimeSource: {value}");
 				Save();
 				_timeSource = value;
 				Load();
 			}
 		}
 
-
 		public static RealTimeSource RealTime = new RealTimeSource();
 		public static PlayTimeSource PlayTime = new PlayTimeSource();
-		public List<ITimeSource> TimeSources { get; } = new List<ITimeSource>() {RealTime, PlayTime};
+
+		public static event Action<List<ITimeSource>>? RegisterTimeSource;
+
+		public List<ITimeSource> TimeSources
+		{
+			get
+			{
+				if (_timeSources.Count == 0)
+				{
+					_timeSources.Add(RealTime);
+					_timeSources.Add(PlayTime);
+					RegisterTimeSource?.Invoke(_timeSources);
+				}
+				return _timeSources;
+			}
+		}
 
 		void Awake()
 		{
 			_instance = this;
-			TimeSource = RealTime;
-			SaveGameManager.Loaded += LoadInitial;
+			Hooks.OnGameLoad += LoadInitial;
+			Hooks.OnGameSave += Save;
 		}
 
-		private void LoadInitial()
+		private void LoadInitial(Hooks.GameLoadData gameLoadData)
 		{
 			var type = SaveGameManager.data.GetString(SAVE_GAME_KEY_SOURCE);
-			Logger.LogDebug($"source to load: {type}");
+			Log.Debug($"source to load: {type}");
 			if (type is { } && type != TimeSource?.Id)
 			{
 				foreach (var timeSource in TimeSources)
 				{
 					if (timeSource.Id == type)
 					{
-						Logger.LogDebug($"found source: {timeSource.Id}");
+						Log.Debug($"found source: {timeSource.Id}");
 						_timeSource = timeSource;
 
 						break;
 					}
 
-					Logger.LogDebug($"wrong source: {timeSource.Id}");
+					Log.Debug($"wrong source: {timeSource.Id}");
 				}
 			}
 
@@ -79,9 +96,10 @@ namespace RedworkDE.DvTime
 			CurrentTime.Time = ts.LocalTime;
 		}
 
+		private void Save(Hooks.GameSaveData gameSaveData) => Save();
 		private void Save()
 		{
-			Logger.LogDebug($"Save: {TimeSource is {}}");
+			Log.Debug($"Save: {TimeSource is {}}");
 
 			if (TimeSource is null) return;
 
@@ -94,15 +112,14 @@ namespace RedworkDE.DvTime
 
 			SaveGameManager.data.SetJObject(SAVE_GAME_KEY, shared);
 			SaveGameManager.data.SetJObject(sourceKey, source);
-			SaveGameManager.data.SetString(SAVE_GAME_KEY_SOURCE, TimeSource?.Id ?? "null");
-
-
-			Logger.LogDebug($"Saved: {shared} // {source}");
+			SaveGameManager.data.SetString(SAVE_GAME_KEY_SOURCE, _timeSource?.Id);
+			
+			Log.Debug($"Saved: {shared} // {source}");
 		}
 
 		private void Load()
 		{
-			Logger.LogDebug($"Load: {SaveGameManager.data is {}} {TimeSource is { }}");
+			Log.Debug($"Load: {SaveGameManager.data is {}} {TimeSource is { }}");
 
 			if (SaveGameManager.data is null) return;
 
@@ -116,20 +133,7 @@ namespace RedworkDE.DvTime
 			TimeSource.Load(shared, source);
 
 
-			Logger.LogDebug($"Loaded: {shared} // {source}");
-		}
-
-		[HarmonyPatch(typeof(SaveGameManager), nameof(SaveGameManager.DoSaveIO)), HarmonyPrefix]
-		private static void SaveGameManager_DoSaveIO_Patch()
-		{
-			Instance.Save();
-		}
-		
-		[HarmonyPatch(typeof(SaveGameManager), nameof(SaveGameManager.DoLoadIO)), HarmonyPostfix]
-		private static void SaveGameManager_DoLoadIO_Patch()
-		{
-			
-			Instance.LoadInitial();
+			Log.Debug($"Loaded: {shared} // {source}");
 		}
 	}
 	
