@@ -67,7 +67,7 @@ namespace RedworkDE.DvTime
 
 		private void LoadInitial(Hooks.GameLoadData gameLoadData)
 		{
-			var type = SaveGameManager.data.GetString(SAVE_GAME_KEY_SOURCE);
+			var type = SaveGameManager.data?.GetString(SAVE_GAME_KEY_SOURCE);
 			Log.Debug($"source to load: {type}");
 			if (type is { } && type != TimeSource?.Id)
 			{

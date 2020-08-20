@@ -14,7 +14,8 @@
 
     <Authors>RedworkDE</Authors>
     <Copyright>(c) 2020 RedworDE</Copyright>
-    <Version>1.5.0</Version>
+    <Version>1.6.0</Version>
+    <RepositoryUrl>https://github.com/RedworkDE/DvTime</RepositoryUrl>
 
   </PropertyGroup>
 
@@ -26,7 +27,7 @@
 
   <!-- add one entry for each assembly where access to private members is required -->
   <ItemGroup>
-    <PackageReference Include="RedworkDE.DerailValley.ModBase" Version="0.1.111" />
+    <PackageReference Include="RedworkDE.DerailValley.ModBase" Version="0.1.119" />
     <PackageReference Include="RedworkDE.Publicizer" Version="0.2.2" />
     <PublicizeAssembly Include="Assembly-CSharp" Private="True" />
     <PublicizeAssembly Include="0Harmony" Private="True" />

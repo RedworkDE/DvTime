@@ -33,6 +33,9 @@ namespace RedworkDE.DvTime
 					UnityModManager.UI.DrawFloatField(pts.TimeScale, "Timescale", n => pts.TimeScale = n);
 					break;
 			}
+
+			GUILayout.Label("Pocket Watch Integration: ");
+			UnityModManager.UI.ToggleGroup((int)PocketWatchPatches.Mode, Enum.GetNames(typeof(PocketWatchPatches.IntegrationMode)), num => PocketWatchPatches.Mode = (PocketWatchPatches.IntegrationMode)num);
 		}
 	}
 #endif

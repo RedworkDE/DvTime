@@ -7,20 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RedworkDE.DvTime", "Redwork
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug_BepInEx|x64 = Debug_BepInEx|x64
-		Debug_UMM|x64 = Debug_UMM|x64
-		Release_BepInEx|x64 = Release_BepInEx|x64
-		Release_UMM|x64 = Release_UMM|x64
+		BepInEx|x64 = BepInEx|x64
+		UMM|x64 = UMM|x64
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Debug_BepInEx|x64.ActiveCfg = Debug_BepInEx|x64
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Debug_BepInEx|x64.Build.0 = Debug_BepInEx|x64
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Debug_UMM|x64.ActiveCfg = Debug_UMM|x64
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Debug_UMM|x64.Build.0 = Debug_UMM|x64
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Release_BepInEx|x64.ActiveCfg = Release_BepInEx|x64
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Release_BepInEx|x64.Build.0 = Release_BepInEx|x64
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Release_UMM|x64.ActiveCfg = Release_UMM|x64
-		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.Release_UMM|x64.Build.0 = Release_UMM|x64
+		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.BepInEx|x64.ActiveCfg = BepInEx|x64
+		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.BepInEx|x64.Build.0 = BepInEx|x64
+		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.UMM|x64.ActiveCfg = UMM|x64
+		{61CDC536-4F20-F6B0-7A32-71021242F0B0}.UMM|x64.Build.0 = UMM|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
