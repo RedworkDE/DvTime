@@ -1,6 +1,22 @@
 # DvTime - Functional Clocks Mod
 This mod makes the various clocks around the Valley work.
 
+## Pocket Watch Integration Modes
+Change how the pocket watch behaves by selecting one of theses modes in the UMM settings menu.  
+If you have suggestions for how to better integrate this mod with the pocket watch, please message me.
+
+### Exclusive
+The pocket watch always shows the time all other functions are disabled. This is the default.
+
+### AddAfterTime
+When clicking while the stopwatch is ticking down, the clock mode will activate.
+
+### ReplaceStopwatch
+When the watch is not ticking and is set to zero, so that normally the stopwatch would start, the clock activates instead.
+
+### None
+The clock cannot be activated and the pocket watch behaves like normal, except for should the watch happen to be in clock mode, clicking once will return it to idle.
+
 ## Commands
 The time shown by this mod can be configured by various console commands:
 
