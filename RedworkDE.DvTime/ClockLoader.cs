@@ -7,7 +7,18 @@ namespace RedworkDE.DvTime
 {
 	public class ClockLoader
 	{
-		private static AssetBundle _wallClockBundle;
+		private static AssetBundle? _wallClockBundle = null;
+		private static AssetBundle WallClockBundle
+        {
+			get
+            {
+				if( _wallClockBundle == null )
+				{
+					_wallClockBundle = AssetBundle.LoadFromStream(typeof(ClockLoader).Assembly.GetManifestResourceStream(typeof(ClockLoader), "clocks"));
+				}
+				return _wallClockBundle;
+			}
+        }
 
 		[AutoLoad]
 		static void Init()
@@ -40,7 +51,7 @@ namespace RedworkDE.DvTime
 
 			Object.Destroy(renderer.gameObject);
 
-			var newClock = Object.Instantiate(_wallClockBundle.LoadAsset<GameObject>("wallclock"), go.transform);
+			var newClock = Object.Instantiate(WallClockBundle.LoadAsset<GameObject>("wallclock"), go.transform);
 			newClock.transform.localEulerAngles = new Vector3(90, 0, 180);
 
 			foreach (Transform child in newClock.transform)
@@ -78,13 +89,13 @@ namespace RedworkDE.DvTime
 			var originalHour = go.transform.Find("StationClock_hour_LOD0");
 			var originalMinute = go.transform.Find("StationClock_minute_LOD0");
 
-			var hourAsset = _wallClockBundle.LoadAsset<GameObject>("StationClock_hour_LOD0");
+			var hourAsset = WallClockBundle.LoadAsset<GameObject>("StationClock_hour_LOD0");
 			var hour1 = Object.Instantiate(hourAsset, originalHour.position, Quaternion.identity, go.transform);
 			var hour2 = Object.Instantiate(hourAsset, originalHour.position, Quaternion.identity, go.transform);
 			hour1.transform.localEulerAngles = new Vector3(0, 0, 0);
 			hour2.transform.localEulerAngles = new Vector3(0, 180, 0);
 
-			var minuteAsset = _wallClockBundle.LoadAsset<GameObject>("StationClock_minute_LOD0");
+			var minuteAsset = WallClockBundle.LoadAsset<GameObject>("StationClock_minute_LOD0");
 			var minute1 = Object.Instantiate(minuteAsset, originalMinute.position, Quaternion.identity, go.transform);
 			var minute2 = Object.Instantiate(minuteAsset, originalMinute.position, Quaternion.identity, go.transform);
 			minute1.transform.localEulerAngles = new Vector3(0, 0, 0);
